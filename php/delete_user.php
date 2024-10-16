@@ -1,0 +1,22 @@
+<?php
+session_start();
+$is_admin = true; // Vérification à faire dans la base de données
+
+if (!$is_admin) {
+    header("Location: login.php");
+    exit();
+}
+
+include '../php/config/db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
+    $user_id = intval($_POST['user_id']);
+
+    // Suppression de l'utilisateur
+    $query = $pdo->prepare("DELETE FROM users WHERE id = ?");
+    $query->execute([$user_id]);
+
+    header("Location: manage_users.php");
+    exit();
+}
+?>
